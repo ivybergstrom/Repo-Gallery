@@ -18,7 +18,7 @@ const displayUserInfo = function (data) {
     div.classList.add("user-info");
         div.innerHTML = `
         <figure>
-            <img alt="user avatar" src=${data.avataur_url} />
+            <img alt="user avatar" src=${data.avatar_url} />
         </figure>
         <div>
             <p><strong>Name:</strong> ${data.name}</p>
