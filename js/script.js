@@ -4,7 +4,8 @@ const displayReposList = document.querySelector(".repo-list") //ul to display re
 const repoClass = document.querySelector(".repos");//selects class of repos
 const repoData = document.querySelector(".repo-data");//selects class of repo data
 const repoList = document.querySelector(".repo-list"); //selects class of repo list
-
+const backButton = document.querySelector(".view-repos"); //selects button class for back to the repo button
+const filterInput = document.querySelector("input"); //selects the input field for the search
 //function to get info from my github profile
 const getBergi = async function () {
     const userInfo = await fetch (`https://api.github.com/users/${username}`);
@@ -41,6 +42,7 @@ const getRepos = async function () {
 
 //the function below is for displaying repo information that is pulled by the getRepos function
 const displayRepoInfo = function (repos) {
+    filterInput.classList.remove("hide");
     for (const repo of repos) {
         const repoItem = document.createElement("li");
         repoItem.classList.add("repo");
@@ -56,7 +58,6 @@ repoList.addEventListener("click", function (e) {
         const repoName = e.target.innerText;
         getInfo(repoName);
     }
-    
 });
 
 //function to collect information of specific repos
@@ -90,4 +91,36 @@ const repoDetails = function (repoInfo, languages) {
        <p>Languages: ${languages.join(", ")}</p>
        <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>`;
        repoData.append(div);
+    //displaying back button
+    backButton.classList.remove("hide");
 };
+
+//function for back to the repo button to work
+backButton.addEventListener("click", function () {
+    //displaying class with section of repos
+    repoClass.classList.remove("hide");
+    //hiding where individual repodata will appear
+    repoData.classList.add("hide");
+    //hiding the button
+    backButton.classList.add("hide");
+});
+
+//function for the search filter
+filterInput.addEventListener("input", function (e){
+    //captures the value of the text searched in the input value
+    const textValue = e.target.value;
+    const repos = document.querySelectorAll(".repo");
+    //lowercase the value of the search text
+    const textValueLower = textValue.toLowerCase();
+
+    //loops through repos inside repos element and makes them all lowercase so the search bar can work effectively
+    for (repo of repos) {
+        const repoLowerCase = repo.innerText.toLowerCase();
+        //checking to see if repoLowerCase matches textValueLower
+        if (repoLowerCase.includes(textValueLower)) {
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
